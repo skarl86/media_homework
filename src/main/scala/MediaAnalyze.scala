@@ -21,9 +21,19 @@ object MediaAnalyze {
     setLogLevel(Level.WARN)
 
     val inputTripleRDD = sc.textFile(NTRIPLE_PATH).map(Unicode.decode).mapPartitions(parseNTriple, true)
+
+    /**
+      * 예제코드.
+      */
     printEvents(inputTripleRDD)
+
+    
   }
 
+  /**
+    * 전체 미디어 데이터의 Event Type을 출력해주는 코드.
+    * @param tripleRDD
+    */
   def printEvents(tripleRDD:RDD[Triple]) = {
     tripleRDD.filter{spo => spo._1.contains("Video") && spo._2.contains("#type") && spo._3.contains("Event")}
       .map{spo => spo._3}.distinct().foreach(println)
